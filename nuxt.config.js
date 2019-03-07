@@ -48,6 +48,7 @@ module.exports = {
   */
   plugins: [
     // '@/plugins/vuetify'
+    '~/plugins/api'
   ],
 
   /*
@@ -74,6 +75,7 @@ module.exports = {
     ],
     plugins: [
       // new VuetifyLoaderPlugin()
+
     ],
     loaders: {
       stylus: {

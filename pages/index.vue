@@ -1,22 +1,35 @@
 <template>
   <div class="section">
-    <button class="button" @click="isDark=!isDark">Toggle</button>
-    <card :success="isDark" :dark="isDark">Hey</card>
-    <card>Hey</card>
+    <game>
+    </game>
   </div>
 </template>
 
 <script>
-  import card from "../components/card";
+
+
+  import Modal from "../components/modal";
+  import Game from "../components/game";
 
   export default {
-    components: {card},
+    components: {Game, Modal},
     data() {
       return {
         isDark: false,
+        firstName: '',
+        surname: '',
+        modalIsActive: false,
       }
     },
-    methods: {}
+    created() {
+
+    },
+    methods: {
+      show() {
+        this.$store.dispatch('toggleModal');
+      }
+    },
+    computed: {}
   }
 </script>
 <style>
