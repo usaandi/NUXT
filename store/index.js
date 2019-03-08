@@ -1,32 +1,45 @@
 export const state = () => ({
-  modal: {
-    active: false,
-  },
+  drawAmount: 1,
+  playerScore: 0,
+  dealerScore: 0,
+  dealerCards: [{
+    image: '',
+    value: '',
+  }],
+  playerCards: [],
   cardPack: {
     deck_id: '',
-  remaining: null,
-  shuffled: null,
-  success: null,
-}
+    remaining: null,
+    shuffled: null,
+    success: null,
+  }
 });
 
 export const mutations = {
-  setModalActive(state, value) {
-    state.modal.active = value;
-  },
   setCardPack(state, value) {
-
+    state.cardPack = value;
+  },
+  drawCard(state, value) {
+    state.playerCards.push({image: value.image, value: value.value});
+  },
+  updateCardRemaining(state, value) {
+    state.cardPack.remaining = value;
   }
 
 };
 
 export const actions = {
-
   generateDeck(context) {
-    context.commit('setCardPack');
-    //this.app.$api.get();
+    this.app.$api.get('new/shuffle/?deck_count=1').then(response => {
+      context.commit('setCardPack', response.data);
+
+    });
   },
-  toggleModal(context) {
-    context.commit('setModalActive', !context.state.modal.active)
+  drawCard(context) {
+    this.app.$api.get(this.state.cardPack.deck_id +
+      '/draw/?count=' + this.state.drawAmount).then(response => {
+      context.commit('updateCardRemaining', response.data.remaining);
+      context.commit('drawCard', response.data['cards'][0]);
+    })
   }
 };

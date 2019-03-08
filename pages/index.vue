@@ -1,15 +1,15 @@
 <template>
-  <div class="section">
-    <game>
+  <section class="section">
+    <game class="container">
     </game>
-  </div>
+  </section>
 </template>
 
 <script>
 
 
   import Modal from "../components/modal";
-  import Game from "../components/game";
+  import Game from "../components/blackJack/game";
 
   export default {
     components: {Game, Modal},
