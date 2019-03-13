@@ -33,19 +33,9 @@
     name: "game",
     components: {GameNavigation},
     data() {
-      return {
-        cardTypes: {'KING': 10, 'QUEEN': 10, 'JACK': 10, 'ACE': 11}
-      }
+      return {}
     },
-    methods: {
-      calculateValue(cardValue) {
-        if (this.cardTypes.hasOwnProperty(cardValue)) {
-          return parseInt(this.cardTypes[cardValue]);
-        } else {
-          return parseInt(cardValue);
-        }
-      },
-    },
+    methods: {},
     computed: {
       dispatchStore() {
         return this.$store.dispatch;
@@ -57,12 +47,9 @@
         return this.$store.state.dealerCards;
       },
       playerScore() {
-        let currentScore = null;
-        this.playerCards.map(c => {
-          currentScore += this.calculateValue(c.value);
-        });
-        return currentScore;
+        return this.$store.getters.currentPlayerScore;
       }
+
     }
 
   }
