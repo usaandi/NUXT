@@ -34,11 +34,14 @@
     name: "gameNavigation",
     methods: {
       getCardBack() {
-        this.dispatchStore('generateDeck');
+        this.dispatchStore('startGameAgain')
       },
       drawCard() {
         this.dispatchStore('drawCard');
       }
+    },
+    created() {
+      this.dispatchStore('generateDeck');
     },
     computed: {
       currentDeck() {

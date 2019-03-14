@@ -5,7 +5,7 @@
       <div class="columns">
         <div class="column">Player Cards
           <p>Score:{{playerScore}}</p>
-          <figure class="image is-64x64" v-for="(card,index)  in playerCards">
+          <figure class="image is-64x64" v-for="(card,index)  in playerDeck">
             <img class="" :src="card.image" :key="index">
           </figure>
 
@@ -39,12 +39,13 @@
     computed: {
       dispatchStore() {
         return this.$store.dispatch;
+
       },
-      playerCards() {
-        return this.$store.state.playerCards;
+      playerDeck() {
+        return this.$store.state.playerDeck;
       },
       dealerDeck() {
-        return this.$store.state.dealerCards;
+        return this.$store.state.dealerDeck;
       },
       playerScore() {
         return this.$store.getters.currentPlayerScore;
