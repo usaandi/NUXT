@@ -26,26 +26,45 @@ export const mutations = {
     state.dealerScore = 0;
     state.cardPack = value;
   },
-  setNewGame(state, value) {
+  SET_NEW_GAME(state, value) {
     state.playerDeck = [];
     state.dealerDeck = [];
     state.playerScore = 0;
     state.dealerScore = 0;
     state.cardPack.remaining = value.remaining
   },
-  drawCard(state, value) {
+  DRAW_CARD(state, value) {
     state.playerDeck.push({image: value.image, value: value.value});
   },
-  updateCardRemaining(state, value) {
+  UPDATE_CARD_REMAINING(state, value) {
     state.cardPack.remaining = value;
   },
-  calculatedCurrentPlayerScore(state, value) {
+  CALCULATED_CURRENT_PLAYER_SCORE(state, value) {
     state.playerScore += calculateValue(state, value.value);
-  }
+  },
+  DRAW_DEALER_2_CARDS(state, value) {
+    value.map(v => {
+      state.dealerDeck.push({image: v.image, value: v.value});
+      state.dealerScore += calculateValue(state, v.value);
+    });
+
+  },
+  DRAW_PLAYER_2_CARDS(state, value) {
+    value.map(v => {
+      state.playerDeck.push({image: v.image, value: v.value});
+      state.playerScore += calculateValue(state, v.value);
+    });
+  },
 
 };
 
 export const actions = {
+
+  checkWinCondition(context) {
+
+  },
+
+
   generateDeck(context) {
     this.app.$api.get('new/shuffle/?deck_count=1').then(response => {
       context.commit('SET_CARD_PACK', response.data);
@@ -56,23 +75,39 @@ export const actions = {
   startGameAgain(context) {
     this.app.$api.get(this.state.cardPack.deck_id + '/shuffle/').then(response => {
       if (this.state.cardPack.deck_id === response.data.deck_id) {
-        context.commit('setNewGame', response.data)
+        context.commit('SET_NEW_GAME', response.data);
+        context.dispatch('drawPlayerCards2');
+        context.dispatch('drawDealerCards2');
       }
     })
   },
   drawPlayerCards2(context) {
+    this.app.$api.get(this.state.cardPack.deck_id +
+      '/draw/?count=' + 2).then(response => {
+      let currentCards = response.data['cards'];
+      context.commit('UPDATE_CARD_REMAINING', response.data.remaining);
+      context.commit('DRAW_PLAYER_2_CARDS', currentCards);
+
+    })
 
   },
   drawDealerCards2(context) {
+    this.app.$api.get(this.state.cardPack.deck_id +
+      '/draw/?count=' + 2).then(response => {
+      let currentCards = response.data['cards'];
+      context.commit('UPDATE_CARD_REMAINING', response.data.remaining);
+      context.commit('DRAW_DEALER_2_CARDS', currentCards);
 
+    })
   },
+
   drawCard(context) {
     this.app.$api.get(this.state.cardPack.deck_id +
       '/draw/?count=' + this.state.drawAmount).then(response => {
       let currentCard = response.data['cards'][0];
-      context.commit('updateCardRemaining', response.data.remaining);
-      context.commit('drawCard', currentCard);
-      context.commit('calculatedCurrentPlayerScore', currentCard)
+      context.commit('UPDATE_CARD_REMAINING', response.data.remaining);
+      context.commit('DRAW_CARD', currentCard);
+      context.commit('CALCULATED_CURRENT_PLAYER_SCORE', currentCard)
     })
   },
 
@@ -81,6 +116,9 @@ export const actions = {
 export const getters = {
   currentPlayerScore: state => {
     return state.playerScore;
+  },
+  currentDealerScore: state => {
+    return state.dealerScore;
   },
 
 

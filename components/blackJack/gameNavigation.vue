@@ -12,7 +12,7 @@
           <button class="button is-fullwidth has-background-danger has-text-white" @click="drawCard">Hit</button>
         </div>
         <div class="level-item">
-          <button class="button is-fullwidth has-background-warning has-text-black">Stand</button>
+          <button class="button is-fullwidth has-background-warning has-text-black" @click="checkStatus">Stand</button>
         </div>
 
       </div>
@@ -38,6 +38,9 @@
       },
       drawCard() {
         this.dispatchStore('drawCard');
+      },
+      checkStatus() {
+        this.dispatchStore('checkWinCondition');
       }
     },
     created() {

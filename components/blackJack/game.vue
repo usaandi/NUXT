@@ -12,12 +12,9 @@
         </div>
         <div class="column ">
           Dealer Cards
-          <p>Score:</p>
-          <figure class="image is-64x64">
-            <img src="https://deckofcardsapi.com/static/img/8C.png">
-          </figure>
-          <figure class="image is-64x64">
-            <img src="https://deckofcardsapi.com/static/img/8C.png">
+          <p>Score: {{dealerScore}}</p>
+          <figure class="image is-64x64" v-for="(card,index) in dealerDeck">
+            <img :src="card.image" :key="index">
           </figure>
         </div>
       </div>
@@ -49,6 +46,9 @@
       },
       playerScore() {
         return this.$store.getters.currentPlayerScore;
+      },
+      dealerScore() {
+        return this.$store.getters.currentDealerScore;
       }
 
     }
